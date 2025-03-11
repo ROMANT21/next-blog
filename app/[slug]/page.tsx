@@ -1,4 +1,4 @@
-import { getPostBySlug, getAllPosts } from "@/libs/posts.mts";
+import { getPostBySlug, getAllPosts } from "@/libs/posts.ts";
 
 // Generate dynamic paths at buildtime
 export async function generateStaticParams() {
