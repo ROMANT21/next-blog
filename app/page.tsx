@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllPosts, PostMetadata } from "@/libs/posts.ts";
+import { getAllPosts } from "@/libs/posts.ts";
 
 export default function Page() {
   const posts = getAllPosts();
