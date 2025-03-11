@@ -2,6 +2,14 @@
   "name": "next-blog",
   "version": "0.1.0",
   "private": true,
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ],
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "arrowParens": "always"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -23,6 +31,8 @@
     "@types/react-dom": "^19",
     "eslint": "9.22.0",
     "eslint-config-next": "15.2.1",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
