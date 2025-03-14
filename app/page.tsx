@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { getSortedPostsData, PostData } from '@/libs/posts.ts';
+import { getSortedPostsData } from '@/libs/posts.ts';
 
-export default function Page(){
+export default function Page() {
   const allPostsData = getSortedPostsData();
   return (
     <div className="flex min-h-screen justify-center bg-stone-100 p-6 text-gray-900">
