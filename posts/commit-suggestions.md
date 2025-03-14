@@ -4,7 +4,6 @@ date: "2025-13-10"
 excerpt: "Using AI to create git commit suggestions"
 ---
 
-
 # Dev Log 1: I can't commit!
 I'm really bad at remembering to commit throughout the development process. Usually what happens is, I make a feature in a code base and end up fixing bugs. It's not until after I've finished my coding session and I'm winding down that I realize I completely forgot to commit changes along the way to document the process. Moreover, by the end of the session, I feel like I don't have the mental acuity to write clear and concise messages.
 
@@ -24,9 +23,27 @@ This was my first conflict in the project. I went into it knowing that I would b
 
 So, per git terminology, I parsed the output into Hunks (which I represented as pydantic BaseModel). The result is something like this:
 
-PICTURE OF GIT DIFF OUTPUT
+```{bash}
+diff --git a/project-notes.txt b/project-notes.txt
+index dc9fcba..e7fbd13 100644
+--- a/project-notes.txt
++++ b/project-notes.txt
+@@ -1,2 +1,3 @@
+ Let's describe the project:
+ * This is a cool project
++* Added more cool stuff
+```
 
-PICTURE OF CREATED HUNK OBJECT
+```{python}
+class Hunk(BaseModel):
+    """This represents a parsed git hunk."""
+
+    file_header: str
+    index_line: str
+    file_path_indicators: str
+    hunk_header: str
+    modified_code: str
+```
 
 There's a lot to be desired in the parsing function. Although I wrote some tests with examples of `git diff`, there are still definitely `git diff` output that will crash the program. This is something that I plan to keep working on as I use the tool.
 
@@ -35,9 +52,31 @@ Fair warning, this was my first time using an OpenAI model (specifically, I used
 
 At first, I tried prompting the LLM for commit suggestions by just feeding it the JSON version of the Hunk objects (i.e. I gave it the snippets of modified code). This didn't work too well and so I quickly realized I was going to have to work on the prompt that I give it.
 
-I ended up this:
+I ended up with this:
 
-PROMPT
+```{bash}
+You are a commit message generator. You will be given a series of code changes (parsed from the `git diff` command), and you are expected
+to return suggested git commits.
+
+Input Details:
+* The code changes are called modified code snippets.
+* A modified code snippet contains:
+    * `filename` (The filepath to the modified code)
+    * `start_line` and `end_line` (line numbers of changes in `filename`)
+    * `modified_code` (the actual code change)
+* The order that the code changes are given does not matter, so do not assume that the changes are in sequential order.
+
+Output Details:
+* Each commit suggestion should include:
+    * A commit message (following Conventional Commits Format)
+    * The modified code snippet indices from the input associated with the commit.
+        * Possible indices are in the range 0-{len(modified_code_snippets.modified_code_snippets) - 1}
+        * Don't be afraid to group hunks that you think are related!
+* The commits should be ordered logically, grouping related changes together (e.g., refactoring before feature additions).
+* The git commit suggestion is made up of a suggested message and modified code snippets to stage.
+    * The generated message should use conventional commit standards. The `start_line` should be the line number the code snippet starts on and the `end_line` should be the end line of the code snippet.
+* Commit messages should be concise and clear (limit the subject line to 72 characters).
+```
 
 It seems like very clearing stating input and output helped the LLM a lot and so far has worked fine.
 
@@ -46,11 +85,13 @@ Moreover, I was able to use one of Open-AI's new API features called `structured
 ### Showing the user Commit Suggestions
 With my output in hand, I could start working on showing the user the commit suggestions. At first, I was just going to show the commit message, but I quickly realized that it would also be useful to show the code snippets that would be included in a commit.
 
-I ended up using the rich library to make the output and what I ended up with is this:
+The end product was this:
 
-PICTURES OF OUTPUT AND PROCESS.
+![commit-suggestions-example](/commit-suggestions-example.gif)
 
-## Reflection
+For instructions on using this version, go to the github!
+
+### Reflection
 To be honest, I wasn't sure if I would be able to finish this project; it came to me in a burst of creativity and I clung to it because I needed a break from a larger project. I'm pretty happy with the current result -- even if it is just a proof of concept.
 
 More importantly, I got to play around with Open-AI's API which I think will be useful for any other future ideas.
