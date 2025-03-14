@@ -16,7 +16,6 @@ export default async function BlogPost({
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  console.log(post.contentHtml);
   return (
     <div className="flex min-h-screen flex-col bg-stone-100 p-6 text-gray-900">
       <main className="mx-auto w-full max-w-3xl">
@@ -24,16 +23,13 @@ export default async function BlogPost({
           <h1>{post.title}</h1>
           <p>Last Updated: {post.date}</p>
           <p>
-            <a
-              href="https://github.com/ROMANT21/commit-suggestions"
-              className="text-emerald-700 underline hover:text-emerald-900"
-            >
+            <a href="https://github.com/ROMANT21/commit-suggestions">
               Link to codebase
             </a>
           </p>
         </header>
         <div
-          className="min-w-full space-y-4 pt-4"
+          className="min-w-full space-y-4 pt-4 text-wrap"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         ></div>
       </main>

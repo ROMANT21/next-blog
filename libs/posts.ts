@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
-import html from 'remark-html';
+import remarkHtml from 'remark-html';
+import remarkSlug from 'remark-slug';
 
 // Define types for post
 export type PostData = {
@@ -56,7 +57,11 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   const { data, content } = matter(fileContents);
 
   // Convert .md content to renderable HTML
-  const processedContent = await remark().use(html).process(content);
+  const processedContent = await remark()
+    .use(remarkSlug)
+    .use(remarkHtml)
+    .process(content);
+  console.log(processedContent);
   const contentHtml = processedContent.toString();
 
   // Return a Post back
