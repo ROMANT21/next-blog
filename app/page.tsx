@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/libs/posts.ts';
+import { getSortedPostsData, PostData } from '@/libs/posts.ts';
 
-export default function Page() {
-  const posts = getAllPosts();
+export default function Page(){
+  const allPostsData = getSortedPostsData();
   return (
     <div className="flex min-h-screen justify-center bg-stone-100 p-6 text-gray-900">
       <main>
@@ -17,7 +17,7 @@ export default function Page() {
         <section className="space-y-6">
           <h2 className="border-b-2 border-emerald-700">Latest Posts</h2>
           <ul>
-            {posts.map((post) => (
+            {allPostsData.map((post) => (
               <li
                 key={post.slug}
                 className="rounded-md p-2 transition duration-300 hover:bg-stone-200"

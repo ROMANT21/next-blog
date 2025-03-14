@@ -5,14 +5,14 @@ import { remark } from "remark";
 import html from "remark-html";
 
 // Define types for post
-export type PostMetadata = {
+export type PostData = {
   title: string;
   date: string;
   excerpt: string;
   slug: string;
 };
 
-export type Post = PostMetadata & {
+export type Post = PostData & {
   contentHtml: string;
 };
 
@@ -20,10 +20,10 @@ export type Post = PostMetadata & {
 const postsDirectory = path.join(process.cwd(), "posts");
 
 // Get all posts metadata
-export function getAllPosts(): PostMetadata[] {
+export function getSortedPostsData(): PostData[] {
   const filenames = fs.readdirSync(postsDirectory);
 
-  return filenames.map((filename) => {
+  const allPostsData = filenames.map((filename) => {
     // Read the meta data from each .md file
     const filepath = path.join(postsDirectory, filename);
     const fileContents = fs.readFileSync(filepath, "utf8");
@@ -37,9 +37,16 @@ export function getAllPosts(): PostMetadata[] {
       excerpt: data.excerpt,
     };
   });
-}
 
-getAllPosts();
+  // Sort the posts by date
+  return allPostsData.sort((a, b) => {
+    if (a.date < b.date) {
+      return 1;
+    } else {
+      return -1;
+    }
+  })
+}
 
 // Get post content
 export async function getPostBySlug(slug: string): Promise<Post> {
