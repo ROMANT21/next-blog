@@ -1,9 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import remarkHtml from 'remark-html';
-import remarkSlug from 'remark-slug';
+import { unified } from 'unified';
+import rehypeFormat from 'rehype-format';
+import rehypeStringify from 'rehype-stringify';
+import rehypeSanitize from 'rehype-sanitize';
+import rehypeSlug from 'rehype-slug';
+import remarkToc from 'remark-toc';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 
 // Define types for post
 export type PostData = {
@@ -57,11 +62,15 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   const { data, content } = matter(fileContents);
 
   // Convert .md content to renderable HTML
-  const processedContent = await remark()
-    .use(remarkSlug)
-    .use(remarkHtml)
+  const processedContent = await unified()
+    .use(remarkParse)
+    .use(remarkToc)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeSlug)
+    .use(rehypeFormat)
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content);
-  console.log(processedContent);
+
   const contentHtml = processedContent.toString();
 
   // Return a Post back
