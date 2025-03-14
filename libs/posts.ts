@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-import { remark } from "remark";
-import html from "remark-html";
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { remark } from 'remark';
+import html from 'remark-html';
 
 // Define types for post
 export type PostData = {
@@ -17,7 +17,7 @@ export type Post = PostData & {
 };
 
 // Get the full path to the posts directory
-const postsDirectory = path.join(process.cwd(), "posts");
+const postsDirectory = path.join(process.cwd(), 'posts');
 
 // Get all posts metadata
 export function getSortedPostsData(): PostData[] {
@@ -26,12 +26,12 @@ export function getSortedPostsData(): PostData[] {
   const allPostsData = filenames.map((filename) => {
     // Read the meta data from each .md file
     const filepath = path.join(postsDirectory, filename);
-    const fileContents = fs.readFileSync(filepath, "utf8");
+    const fileContents = fs.readFileSync(filepath, 'utf8');
     const { data } = matter(fileContents);
 
     // Return the filename (without .md) and metadata
     return {
-      slug: filename.replace(".md", ""),
+      slug: filename.replace('.md', ''),
       title: data.title,
       date: data.date,
       excerpt: data.excerpt,
@@ -45,14 +45,14 @@ export function getSortedPostsData(): PostData[] {
     } else {
       return -1;
     }
-  })
+  });
 }
 
 // Get post content
 export async function getPostBySlug(slug: string): Promise<Post> {
   // Get the metadata and content from .md file
   const filePath = path.join(postsDirectory, `${slug}.md`);
-  const fileContents = fs.readFileSync(filePath, "utf8");
+  const fileContents = fs.readFileSync(filePath, 'utf8');
   const { data, content } = matter(fileContents);
 
   // Convert .md content to renderable HTML
