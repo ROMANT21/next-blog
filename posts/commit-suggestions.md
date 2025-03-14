@@ -1,6 +1,6 @@
 ---
 title: "Commit Suggestions"
-date: "2025-13-10"
+date: "2025-3-10"
 excerpt: "Using AI to create git commit suggestions"
 ---
 
