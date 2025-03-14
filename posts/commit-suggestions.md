@@ -4,18 +4,12 @@ date: "2025-3-10"
 excerpt: "Using AI to create git commit suggestions"
 ---
 
-## 📌 Table of Contents
-- [Introduction](#user-content-introduction)
-- [The Project Plan](#user-content-the-project-plan)
-- [Parsing Git Diffs](#user-content-parsing-git-diffs)
-- [Prompting the LLM](#user-content-prompting-llm)
-- [Showing the User Commit Suggestions](#user-content-showing-the-user-commit-suggestions)
-- [Reflection](#user-content-reflection)
-
-## 🚀 Introduction
+# 🚀 Introduction
 I'm really bad at remembering to commit throughout the development process. Usually what happens is, I make a feature in a code base and end up fixing bugs. It's not until after I've finished my coding session and I'm winding down that I realize I completely forgot to commit changes along the way to document the process. Moreover, by the end of the session, I feel like I don't have the mental acuity to write clear and concise messages.
 
 So, rather than setting timers, dividing my work, or forming better habits, I spent a few days to automate the task for me (in true programmer fashion)!
+
+## Contents
 
 ## 👷 The Project Plan
 The execution flow is pretty simple:
